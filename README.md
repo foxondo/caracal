@@ -733,6 +733,64 @@ end
 
 ## Experimental Features
 
+### Headers
+
+Pages can also include headers, which will be repeated on every page in the document.
+
+```ruby
+docx.header.h1 'Page Header'
+
+docx.header do
+  p 'Page headers can contain headings, paragraphs, images, lists, even tables, all using the usual syntax and options.', align: :center
+end
+
+docx.header.img "http://example.com/image.png" do
+  width  60
+  height 60
+  align :right
+end
+
+docx.header.ol do
+  li 'First item'
+  li do
+    text 'Second item with a '
+    link 'link', "http://example.com/image.png"
+    text '.'
+    br
+    text 'This sentence follows a line break.'
+  end
+end
+
+docx.header.table [['11', '1213', '14'], ['21', '22', '23', '24']] do
+  cell_style rows[0][0], rowspan: 2
+  cell_style rows[0][1], colspan: 2
+  cell_style rows[0][2], rowspan: 2
+end
+
+docx.header.hr
+```
+
+
+### Table of contents
+
+Table of contents can be automatically generated.
+
+```ruby
+docx.table_of_contents
+# Or, for brevity:
+docx.toc
+
+Both methods accept the same options: legend, start_level, and end_level
+
+docx.toc legend: 'Table of contents', start_level: 1, end_level: 3
+# or using block form:
+docx.toc do
+  legend      'Table of contents' # Default is nil
+  start_level 1                   # Default is 1 (headings level 1, aka docx.h1 or p style: 'Heading1')
+  end_level   3                   # Default is 3 (headings level 3, aka docx.h3 or p style: 'Heading3')
+end
+```
+
 ### IFrames
 
 You can include an external Word document into your working Caracal document by specifying a URL or by supplying the data directly.
